@@ -94,6 +94,7 @@
             cursor: pointer;
             transition: all 0.3s ease;
             background: rgba(233, 69, 96, 0.05);
+            position: relative;
         }
 
         .upload-area:hover {
@@ -105,6 +106,7 @@
         .upload-area.dragover {
             border-color: #ff6b6b;
             background: rgba(233, 69, 96, 0.15);
+            transform: scale(1.02);
         }
 
         .upload-icon {
@@ -117,6 +119,13 @@
             align-items: center;
             justify-content: center;
             box-shadow: 0 10px 30px rgba(233, 69, 96, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 10px 30px rgba(233, 69, 96, 0.3); }
+            50% { box-shadow: 0 10px 40px rgba(233, 69, 96, 0.5); }
+            100% { box-shadow: 0 10px 30px rgba(233, 69, 96, 0.3); }
         }
 
         .upload-icon svg {
@@ -148,6 +157,104 @@
         .preview-section.active {
             display: block;
             animation: fadeIn 0.3s ease;
+        }
+
+        .preview-header {
+            margin-bottom: 20px;
+        }
+
+        .preview-header h3 {
+            color: #fff;
+            font-size: 20px;
+        }
+
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+        }
+
+        .preview-item {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            aspect-ratio: 1;
+            background: rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .preview-item:hover {
+            transform: scale(1.05);
+            z-index: 1;
+        }
+
+        .preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .preview-item-remove {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(255, 71, 87, 0.95);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 12px;
+            transition: all 0.3s ease;
+            opacity: 0.7;
+        }
+
+        .preview-item:hover .preview-item-remove {
+            opacity: 1;
+        }
+
+        .preview-item-remove:hover {
+            background: #ff4757;
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(255, 71, 87, 0.5);
+        }
+
+        .preview-item-remove svg {
+            width: 14px;
+            height: 14px;
+            fill: white;
+        }
+
+        .preview-item-remove .remove-text {
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .preview-item-name {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 8px;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            color: #fff;
+            font-size: 11px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         @keyframes fadeIn {
@@ -216,7 +323,7 @@
 
         .upload-btn {
             flex: 2;
-            padding: 15px;
+            padding: 15px 25px;
             background: linear-gradient(135deg, #e94560 0%, #ff6b6b 100%);
             color: white;
             border: none;
@@ -225,9 +332,11 @@
             font-size: 15px;
             font-weight: 600;
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
 
-        .upload-btn:hover {
+        .upload-btn:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 10px 30px rgba(233, 69, 96, 0.4);
         }
@@ -237,6 +346,22 @@
             cursor: not-allowed;
             transform: none;
             box-shadow: none;
+        }
+
+        .upload-btn .badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #fff;
+            color: #e94560;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
         }
 
         /* Gallery Section */
@@ -278,17 +403,61 @@
             aspect-ratio: 1;
             cursor: pointer;
             background: rgba(0, 0, 0, 0.3);
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .gallery-item:hover {
             transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
         }
 
         .gallery-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-item-delete {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(255, 71, 87, 0.95);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 12px;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .gallery-item:hover .gallery-item-delete {
+            display: flex;
+        }
+
+        .gallery-item-delete:hover {
+            background: #ff4757;
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(255, 71, 87, 0.5);
+        }
+
+        .gallery-item-delete svg {
+            width: 16px;
+            height: 16px;
+            fill: white;
+        }
+
+        .gallery-item-delete .delete-text {
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
         }
 
         .gallery-item-overlay {
@@ -391,106 +560,230 @@
             transform: translateX(-50%) translateY(100px);
             background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
             color: white;
-            padding: 15px 30px;
+            padding: 18px 35px;
             border-radius: 30px;
             font-weight: 600;
+            font-size: 16px;
             box-shadow: 0 10px 30px rgba(76, 175, 80, 0.4);
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
             z-index: 1001;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .success-toast.show {
             transform: translateX(-50%) translateY(0);
+            box-shadow: 0 15px 40px rgba(76, 175, 80, 0.5);
         }
 
         @media (max-width: 768px) {
             .header h1 {
-                font-size: 28px;
+                font-size: 26px;
             }
             
             .container {
-                padding: 10px;
+                padding: 8px;
             }
             
             .tabs {
-                flex-direction: column;
-                align-items: center;
-                gap: 10px;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 8px;
             }
             
             .tab-btn {
-                width: 100%;
-                max-width: 250px;
-                padding: 12px 30px;
+                width: auto;
+                max-width: none;
+                padding: 10px 20px;
+                font-size: 14px;
             }
             
             .upload-section, .gallery-section {
-                padding: 20px;
+                padding: 15px;
             }
             
             .upload-area {
-                padding: 40px 20px;
+                padding: 30px 15px;
             }
             
             .upload-icon {
-                width: 60px;
-                height: 60px;
+                width: 50px;
+                height: 50px;
             }
             
             .upload-icon svg {
-                width: 30px;
-                height: 30px;
+                width: 25px;
+                height: 25px;
             }
             
             .upload-area h3 {
-                font-size: 18px;
+                font-size: 16px;
+            }
+            
+            .upload-area p {
+                font-size: 12px;
             }
             
             .gallery-grid {
-                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-                gap: 12px;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
             }
             
-            .preview-image {
-                max-height: 250px;
+            .preview-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+                max-height: 280px;
+                padding: 8px;
+            }
+            
+            .preview-header h3 {
+                font-size: 16px;
+            }
+            
+            .preview-item {
+                border-radius: 8px;
+            }
+            
+            .preview-item-remove {
+                padding: 4px 8px;
+                top: 4px;
+                right: 4px;
+                border-radius: 12px;
+            }
+            
+            .preview-item-remove svg {
+                width: 12px;
+                height: 12px;
+            }
+            
+            .preview-item-remove .remove-text {
+                display: none;
+            }
+            
+            .preview-item-name {
+                font-size: 10px;
+                padding: 6px;
             }
             
             .btn-group {
                 flex-direction: column;
-                gap: 10px;
+                gap: 8px;
             }
             
             .remove-btn, .upload-btn {
                 width: 100%;
                 flex: none;
+                padding: 12px;
+                font-size: 14px;
             }
             
             .lightbox-close {
-                top: 15px;
-                right: 15px;
-                width: 40px;
-                height: 40px;
+                top: 10px;
+                right: 10px;
+                width: 36px;
+                height: 36px;
+            }
+            
+            .success-toast {
+                padding: 12px 20px;
+                font-size: 14px;
+                bottom: 20px;
+            }
+            
+            .upload-btn .badge {
+                width: 18px;
+                height: 18px;
+                font-size: 10px;
+                top: -6px;
+                right: -6px;
+            }
+            
+            .gallery-item-delete {
+                padding: 4px;
+                width: 28px;
+                height: 28px;
+                top: 4px;
+                right: 4px;
+            }
+            
+            .gallery-item-delete svg {
+                width: 14px;
+                height: 14px;
+            }
+            
+            .gallery-item-delete .delete-text {
+                display: none;
             }
         }
         
         @media (max-width: 480px) {
             .header h1 {
-                font-size: 24px;
+                font-size: 22px;
             }
             
             .header p {
-                font-size: 14px;
+                font-size: 12px;
+            }
+            
+            .tabs {
+                gap: 6px;
+            }
+            
+            .tab-btn {
+                padding: 8px 16px;
+                font-size: 13px;
             }
             
             .gallery-header {
                 flex-direction: column;
-                gap: 10px;
+                gap: 8px;
                 text-align: center;
+            }
+            
+            .gallery-header h2 {
+                font-size: 18px;
             }
             
             .gallery-grid {
                 grid-template-columns: repeat(2, 1fr);
-                gap: 10px;
+                gap: 6px;
+            }
+            
+            .preview-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 6px;
+                max-height: 240px;
+            }
+            
+            .gallery-item-overlay {
+                padding: 8px;
+            }
+            
+            .gallery-item-overlay p {
+                font-size: 10px;
+            }
+        }
+        
+        @media (max-width: 360px) {
+            .header h1 {
+                font-size: 18px;
+            }
+            
+            .tab-btn {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+            
+            .upload-area {
+                padding: 20px 10px;
+            }
+            
+            .gallery-grid,
+            .preview-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 5px;
             }
         }
     </style>
@@ -516,22 +809,22 @@
                             <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/>
                         </svg>
                     </div>
-                    <h3>Drop your photo here</h3>
-                    <p>or click to browse • PNG, JPG, GIF supported</p>
+                    <h3>Drop your photos here</h3>
+                    <p>or click to browse • PNG, JPG, GIF supported • Multiple files allowed</p>
                 </div>
-                <input type="file" id="fileInput" accept="image/*">
+                <input type="file" id="fileInput" accept="image/*" multiple>
 
                 <div class="preview-section" id="previewSection">
-                    <div class="preview-card">
-                        <img class="preview-image" id="previewImage" src="" alt="Preview">
-                        <div class="preview-info">
-                            <p id="fileName">filename.jpg</p>
-                            <p class="file-size" id="fileSize">0 KB</p>
-                        </div>
-                        <div class="btn-group">
-                            <button class="remove-btn" id="removeBtn">Remove</button>
-                            <button class="upload-btn" id="uploadBtn">Upload Photo</button>
-                        </div>
+                    <div class="preview-header">
+                        <h3>Selected Photos (<span id="selectedCount">0</span>)</h3>
+                    </div>
+                    <div class="preview-grid" id="previewGrid"></div>
+                    <div class="btn-group">
+                        <button class="remove-btn" id="clearAllBtn">Clear All</button>
+                        <button class="upload-btn" id="uploadBtn">
+                            Upload All Photos
+                            <span class="badge" id="uploadBadge" style="display: none;">0</span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -579,10 +872,9 @@
         const uploadArea = document.getElementById('uploadArea');
         const fileInput = document.getElementById('fileInput');
         const previewSection = document.getElementById('previewSection');
-        const previewImage = document.getElementById('previewImage');
-        const fileName = document.getElementById('fileName');
-        const fileSize = document.getElementById('fileSize');
-        const removeBtn = document.getElementById('removeBtn');
+        const previewGrid = document.getElementById('previewGrid');
+        const selectedCount = document.getElementById('selectedCount');
+        const clearAllBtn = document.getElementById('clearAllBtn');
         const uploadBtn = document.getElementById('uploadBtn');
         const galleryGrid = document.getElementById('galleryGrid');
         const photoCount = document.getElementById('photoCount');
@@ -590,8 +882,10 @@
         const lightboxImage = document.getElementById('lightboxImage');
         const lightboxClose = document.getElementById('lightboxClose');
         const successToast = document.getElementById('successToast');
+        const uploadBadge = document.getElementById('uploadBadge');
 
-        let selectedFile = null;
+        // Selected files array
+        let selectedFiles = [];
 
         // Tab switching
         tabBtns.forEach(btn => {
@@ -625,37 +919,87 @@
             e.preventDefault();
             uploadArea.classList.remove('dragover');
             if (e.dataTransfer.files.length > 0) {
-                handleFile(e.dataTransfer.files[0]);
+                handleFiles(e.dataTransfer.files);
             }
         });
 
         // File input change
         fileInput.addEventListener('change', (e) => {
             if (e.target.files.length > 0) {
-                handleFile(e.target.files[0]);
+                handleFiles(e.target.files);
             }
         });
 
-        // Handle file selection
-        function handleFile(file) {
-            if (!file.type.startsWith('image/')) {
-                alert('Please select an image file');
+        // Handle multiple files selection
+        function handleFiles(files) {
+            const imageFiles = Array.from(files).filter(file => file.type.startsWith('image/'));
+            
+            if (imageFiles.length === 0) {
+                alert('Please select image files');
                 return;
             }
 
-            selectedFile = file;
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                previewImage.src = e.target.result;
-                fileName.textContent = file.name;
-                fileSize.textContent = formatFileSize(file.size);
-                previewSection.classList.add('active');
-                uploadBtn.disabled = false;
-            };
-            reader.readAsDataURL(file);
+            // Add new files to selectedFiles array
+            imageFiles.forEach(file => {
+                // Check if file is already added
+                const isDuplicate = selectedFiles.some(f => f.name === file.name && f.size === file.size);
+                if (!isDuplicate) {
+                    selectedFiles.push(file);
+                }
+            });
+
+            renderPreviewGrid();
+            previewSection.classList.add('active');
+            uploadBtn.disabled = false;
         }
 
-        // Format file size
+        // Render preview grid
+        function renderPreviewGrid() {
+            selectedCount.textContent = selectedFiles.length;
+            
+            // Update badge on upload button
+            if (selectedFiles.length > 0) {
+                uploadBadge.textContent = selectedFiles.length;
+                uploadBadge.style.display = 'flex';
+            } else {
+                uploadBadge.style.display = 'none';
+            }
+            
+            previewGrid.innerHTML = selectedFiles.map((file, index) => `
+                <div class="preview-item" data-index="${index}">
+                    <img src="${URL.createObjectURL(file)}" alt="${file.name}">
+                    <button class="preview-item-remove" onclick="removeFromSelection(${index})" title="Remove this photo">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                        </svg>
+                        <span class="remove-text">Remove</span>
+                    </button>
+                    <div class="preview-item-name">${file.name}</div>
+                </div>
+            `).join('');
+        }
+
+        // Remove single file from selection
+        function removeFromSelection(index) {
+            selectedFiles.splice(index, 1);
+            renderPreviewGrid();
+            
+            if (selectedFiles.length === 0) {
+                previewSection.classList.remove('active');
+                uploadBtn.disabled = true;
+            }
+        }
+
+        // Clear all selected files
+        clearAllBtn.addEventListener('click', () => {
+            selectedFiles = [];
+            fileInput.value = '';
+            previewSection.classList.remove('active');
+            uploadBtn.disabled = true;
+            uploadBadge.style.display = 'none';
+        });
+
+        // Format file size (kept for potential future use)
         function formatFileSize(bytes) {
             if (bytes === 0) return '0 Bytes';
             const k = 1024;
@@ -664,52 +1008,52 @@
             return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
         }
 
-        // Remove photo
-        removeBtn.addEventListener('click', () => {
-            selectedFile = null;
-            fileInput.value = '';
-            previewSection.classList.remove('active');
-            uploadBtn.disabled = true;
-        });
-
-        // Upload button
+        // Upload button - handle multiple files
         uploadBtn.addEventListener('click', () => {
-            if (selectedFile) {
+            if (selectedFiles.length > 0) {
                 uploadBtn.textContent = 'Uploading...';
                 uploadBtn.disabled = true;
 
-                setTimeout(() => {
-                    // Create photo object
+                let uploadedCount = 0;
+                const totalFiles = selectedFiles.length;
+
+                selectedFiles.forEach((file, index) => {
                     const reader = new FileReader();
                     reader.onload = (e) => {
                         const photo = {
-                            id: Date.now(),
-                            name: selectedFile.name,
+                            id: Date.now() + index,
+                            name: file.name,
                             data: e.target.result,
-                            size: selectedFile.size,
+                            size: file.size,
                             date: new Date().toLocaleDateString()
                         };
                         
                         photos.unshift(photo);
-                        localStorage.setItem('mamorigPhotos', JSON.stringify(photos));
+                        uploadedCount++;
                         
-                        // Show success
-                        showSuccessToast();
-                        
-                        // Reset form
-                        selectedFile = null;
-                        fileInput.value = '';
-                        previewSection.classList.remove('active');
-                        uploadBtn.disabled = true;
-                        uploadBtn.textContent = 'Upload Photo';
+                        if (uploadedCount === totalFiles) {
+                            localStorage.setItem('mamorigPhotos', JSON.stringify(photos));
+                            
+                            // Show success
+                            showSuccessToast(`${totalFiles} photo${totalFiles > 1 ? 's' : ''} uploaded successfully!`);
+                            
+                            // Reset form
+                            selectedFiles = [];
+                            fileInput.value = '';
+                            previewSection.classList.remove('active');
+                            uploadBtn.disabled = true;
+                            uploadBtn.textContent = 'Upload All Photos';
+                            uploadBadge.style.display = 'none';
+                        }
                     };
-                    reader.readAsDataURL(selectedFile);
-                }, 1000);
+                    reader.readAsDataURL(file);
+                });
             }
         });
 
         // Show success toast
-        function showSuccessToast() {
+        function showSuccessToast(message) {
+            successToast.textContent = '✅ ' + message;
             successToast.classList.add('show');
             setTimeout(() => {
                 successToast.classList.remove('show');
@@ -735,11 +1079,29 @@
             galleryGrid.innerHTML = photos.map(photo => `
                 <div class="gallery-item" onclick="openLightbox('${photo.data}')">
                     <img src="${photo.data}" alt="${photo.name}">
+                    <button class="gallery-item-delete" onclick="deletePhoto(event, ${photo.id})" title="Delete this photo">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+                        </svg>
+                        <span class="delete-text">Delete</span>
+                    </button>
                     <div class="gallery-item-overlay">
                         <p>${photo.name}</p>
                     </div>
                 </div>
             `).join('');
+        }
+
+        // Delete photo from gallery
+        function deletePhoto(event, photoId) {
+            event.stopPropagation();
+            
+            if (confirm('Are you sure you want to delete this photo?')) {
+                photos = photos.filter(photo => photo.id !== photoId);
+                localStorage.setItem('mamorigPhotos', JSON.stringify(photos));
+                renderGallery();
+                showSuccessToast('Photo deleted successfully!');
+            }
         }
 
         // Lightbox functions
